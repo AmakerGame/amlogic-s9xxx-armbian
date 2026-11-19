@@ -1,0 +1,12 @@
+[Unit]
+Description=X96 ensure wlan0 connects to saved Wi-Fi profile
+After=w1-wireless.service NetworkManager.service
+Wants=w1-wireless.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/sbin/x96-wifi-autoconnect.sh
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target

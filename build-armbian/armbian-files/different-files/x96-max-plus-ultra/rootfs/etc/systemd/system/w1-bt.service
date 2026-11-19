@@ -1,14 +1,15 @@
 [Unit]
-Description=Amlogic W1 Bluetooth HCI attach
+Description=Amlogic W1 Bluetooth HCI attach (ttyS2)
 After=w1-wireless.service dev-ttyS2.device
-Wants=dev-ttyS2.device
+Wants=w1-wireless.service dev-ttyS2.device
 
 [Service]
-Type=forking
-ExecStartPre=/usr/local/sbin/w1-bt-prep.sh
+Type=simple
+KillMode=process
+ExecStartPre=/bin/sh -c "i=0; while [ ! -e /dev/ttyS2 ] && [ $i -lt 30 ]; do sleep 1; i=$((i+1)); done; rmmod sdio_bt 2>/dev/null; sleep 1; insmod /lib/modules/6.18.59-meson64/sdio_bt.ko; sleep 3"
 ExecStart=/usr/sbin/aml_hciattach -d 1 -t 300 /dev/ttyS2 aml
 Restart=on-failure
-RestartSec=3
+RestartSec=10
 
 [Install]
 WantedBy=multi-user.target

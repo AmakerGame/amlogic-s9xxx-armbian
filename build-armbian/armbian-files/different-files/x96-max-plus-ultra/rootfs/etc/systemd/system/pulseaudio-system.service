@@ -1,0 +1,13 @@
+[Unit]
+Description=PulseAudio system-wide sound server
+After=network.target bluetooth.service sound.target
+Wants=bluetooth.service
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/pulseaudio --system --disallow-exit --log-target=journal
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
+WantedBy=sound.target
